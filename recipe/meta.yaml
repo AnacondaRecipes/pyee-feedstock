@@ -31,6 +31,7 @@ test:
     - pyee
   commands:
     - pip check
+    - {{ PYTHON }} run_test.py
 
 about:
   home: https://github.com/jfhbrook/pyee
