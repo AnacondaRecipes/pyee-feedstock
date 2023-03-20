@@ -27,8 +27,6 @@ requirements:
 test:
   requires:
     - pip
-  imports:
-    - pyee
   commands:
     - pip check
     - {{ PYTHON }} run_test.py
