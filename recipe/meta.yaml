@@ -27,8 +27,6 @@ requirements:
 test:
   requires:
     - pip
-    - pkgconfig
-    - pkg-config
     - python
   commands:
     - pip check
