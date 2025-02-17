@@ -35,12 +35,13 @@ test:
   commands:
     - pip check
     - python run_test.py
-    - pytest -v tests
+    # pytest-trio is not avaliable on py313
+    - pytest -v tests  # [py<313]
   requires:
     - pip
     - pytest
     - pytest-asyncio
-    - pytest-trio
+    - pytest-trio  # [py<313]
     - twisted
 
 about:
