@@ -36,13 +36,14 @@ test:
     - pip check
     - python run_test.py
     # pytest-trio is not avaliable on py313
-    - pytest -v tests  # [py<313]
+    # twisted is not avaliable on windows
+    - pytest -v tests  # [py<313 and not (win and x86_64)]
   requires:
     - pip
     - pytest
     - pytest-asyncio
     - pytest-trio  # [py<313]
-    - twisted
+    - twisted  # [not win]
 
 about:
   home: https://github.com/jfhbrook/pyee
