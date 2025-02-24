@@ -1,18 +1,20 @@
 {% set name = "pyee" %}
-{% set version = "9.0.4" %}
+{% set version = "12.1.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 2770c4928abc721f46b705e6a72b0c59480c4a69c9a83ca0b00bb994f1ea4b32
+  url: https://github.com/jfhbrook/pyee/archive/v{{ version }}.tar.gz
+  sha256: 5ed85c3b1e9b579c7e65ca78ceeae5641d0f5eabce3804896c9f6a27228253d7
 
 build:
   number: 0
-  script: cd {{ RECIPE_DIR }} && {{ PYTHON }} builder.py
-  skip: True  # [py<37]
+  script_env:
+    - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<38]
 
 requirements:
   host:
@@ -20,17 +22,28 @@ requirements:
     - python
     - setuptools
     - wheel
+    - setuptools-scm
   run:
     - python
     - typing_extensions
 
 test:
-  requires:
-    - pip
-    - python
+  source_files:
+    - tests
+  imports:
+    - pyee
   commands:
     - pip check
     - python run_test.py
+    # pytest-trio is not avaliable on py313
+    # twisted is not avaliable on windows
+    - pytest -v tests  # [py<313 and not (win and x86_64)]
+  requires:
+    - pip
+    - pytest
+    - pytest-asyncio
+    - pytest-trio  # [py<313]
+    - twisted  # [not win]
 
 about:
   home: https://github.com/jfhbrook/pyee
