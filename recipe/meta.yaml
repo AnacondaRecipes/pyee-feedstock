@@ -27,6 +27,9 @@ requirements:
     - python
     - typing_extensions
 
+# E       fixture 'event_loop' not found
+{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
+
 test:
   source_files:
     - tests
@@ -34,16 +37,14 @@ test:
     - pyee
   commands:
     - pip check
-    - python run_test.py
-    # pytest-trio is not avaliable on py313
-    # twisted is not avaliable on windows
-    - pytest -v tests  # [py<313 and not (win and x86_64)]
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v tests {{ deselect_test }}
   requires:
     - pip
     - pytest
     - pytest-asyncio
-    - pytest-trio  # [py<313]
-    - twisted  # [not win]
+    - pytest-trio
+    - twisted
 
 about:
   home: https://github.com/jfhbrook/pyee
