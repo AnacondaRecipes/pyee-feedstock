@@ -1,14 +1,12 @@
 {% set name = "pyee" %}
 {% set version = "13.0.1" %}
-{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
 
-# E       fixture 'event_loop' not found
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/jfhbrook/pyee/archive/v{{ version }}.tar.gz
+  url: https://github.com/jfhbrook/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: cb04405c0d77189031f79058d8c21ebfe653aefc9356e3bcb029c9b84a6d4eb5
 
 build:
@@ -28,6 +26,9 @@ requirements:
   run:
     - python
     - typing_extensions
+
+# E       fixture 'event_loop' not found
+{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
 
 test:
   source_files:
