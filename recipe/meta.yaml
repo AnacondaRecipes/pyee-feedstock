@@ -1,13 +1,13 @@
 {% set name = "pyee" %}
-{% set version = "13.0.0" %}
+{% set version = "13.0.1" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/jfhbrook/pyee/archive/v{{ version }}.tar.gz
-  sha256: 0d09a47412dc50f52647a30499ec50e1c1248ca2d4d8d842fd3604fa76f083ad
+  url: https://github.com/jfhbrook/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: cb04405c0d77189031f79058d8c21ebfe653aefc9356e3bcb029c9b84a6d4eb5
 
 build:
   number: 0
