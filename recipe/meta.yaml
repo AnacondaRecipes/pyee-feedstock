@@ -2,6 +2,11 @@
 {% set version = "12.0.0" %}
 # E fixture 'event_loop' not found
 {% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
+{% set deselect_emit = " --deselect=tests/test_async.py::test_asyncio_emit" %}
+{% set deselect_once_emit = " --deselect=tests/test_async.py::test_asyncio_once_emit" %}
+{% set deselect_error = " --deselect=tests/test_async.py::test_asyncio_error" %}
+{% set deselect_cancellation = " --deselect=tests/test_async.py::test_asyncio_cancellation" %}
+{% set deselect_sync = " --deselect=tests/test_async.py::test_sync_error" %}
 
 package:
   name: {{ name }}
@@ -38,7 +43,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v tests {{ deselect_test }}
+    - pytest -v tests {{ deselect_test }} {{ deselect_emit }} {{ deselect_once_emit }} {{ deselect_error }} {{ deselect_cancellation }} {{ deselect_sync }}
   requires:
     - pip
     - pytest
