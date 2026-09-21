@@ -1,5 +1,5 @@
 {% set name = "pyee" %}
-{% set version = "12.1.1" %}
+{% set version = "12.0.0" %}
 # E fixture 'event_loop' not found
 {% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
 
@@ -8,12 +8,12 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/jfhbrook/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 5ed85c3b1e9b579c7e65ca78ceeae5641d0f5eabce3804896c9f6a27228253d7
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: c480603f4aa2927d4766eb41fa82793fe60a82cbfdb8d688e0d08c55a534e145
 
 build:
   number: 0
-  skip: true  # [py<38]
+  skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
