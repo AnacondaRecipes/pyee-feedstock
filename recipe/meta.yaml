@@ -1,5 +1,7 @@
 {% set name = "pyee" %}
-{% set version = "13.0.1" %}
+{% set version = "12.1.1" %}
+# E fixture 'event_loop' not found
+{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
 
 package:
   name: {{ name }}
@@ -7,14 +9,14 @@ package:
 
 source:
   url: https://github.com/jfhbrook/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: cb04405c0d77189031f79058d8c21ebfe653aefc9356e3bcb029c9b84a6d4eb5
+  sha256: 5ed85c3b1e9b579c7e65ca78ceeae5641d0f5eabce3804896c9f6a27228253d7
 
 build:
   number: 0
+  skip: true  # [py<38]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: true  # [py<38]
 
 requirements:
   host:
@@ -27,8 +29,6 @@ requirements:
     - python
     - typing_extensions
 
-# E       fixture 'event_loop' not found
-{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
 
 test:
   source_files:
@@ -61,6 +61,10 @@ about:
   dev_url: https://github.com/jfhbrook/pyee
 
 extra:
+  anaconda-services:
+    ref:
+      - https://anaconda.zendesk.com/agent/tickets/109074
   recipe-maintainers:
     - mxschmitt
     - kiwi0fruit
+    - anaconda-services
