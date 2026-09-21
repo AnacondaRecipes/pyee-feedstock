@@ -1,20 +1,27 @@
 {% set name = "pyee" %}
-{% set version = "13.0.1" %}
+{% set version = "12.0.0" %}
+# E fixture 'event_loop' not found
+{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
+{% set deselect_emit = " --deselect=tests/test_async.py::test_asyncio_emit" %}
+{% set deselect_once_emit = " --deselect=tests/test_async.py::test_asyncio_once_emit" %}
+{% set deselect_error = " --deselect=tests/test_async.py::test_asyncio_error" %}
+{% set deselect_cancellation = " --deselect=tests/test_async.py::test_asyncio_cancellation" %}
+{% set deselect_sync = " --deselect=tests/test_async.py::test_sync_error" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/jfhbrook/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: cb04405c0d77189031f79058d8c21ebfe653aefc9356e3bcb029c9b84a6d4eb5
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: c480603f4aa2927d4766eb41fa82793fe60a82cbfdb8d688e0d08c55a534e145
 
 build:
   number: 0
+  skip: true  # [py<310]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: true  # [py<38]
 
 requirements:
   host:
@@ -27,8 +34,6 @@ requirements:
     - python
     - typing_extensions
 
-# E       fixture 'event_loop' not found
-{% set deselect_test = " --deselect=tests/test_trio.py::test_sync_error" %}
 
 test:
   source_files:
@@ -38,7 +43,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v tests {{ deselect_test }}
+    - pytest -v tests {{ deselect_test }} {{ deselect_emit }} {{ deselect_once_emit }} {{ deselect_error }} {{ deselect_cancellation }} {{ deselect_sync }}
   requires:
     - pip
     - pytest
@@ -61,6 +66,10 @@ about:
   dev_url: https://github.com/jfhbrook/pyee
 
 extra:
+  anaconda-services:
+    ref:
+      - https://anaconda.zendesk.com/agent/tickets/109074
   recipe-maintainers:
     - mxschmitt
     - kiwi0fruit
+    - anaconda-services
